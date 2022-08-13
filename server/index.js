@@ -4,11 +4,11 @@ const app = express();
 
 dotenv.config();
 
-app.get("/", function(req, res) {
+app.use(express.json());
+
+app.get("/api", function(req, res) {
     res.send("Hello world");
 });
-
-app.use(express.json());
 
 const PORT = 8000;
 
