@@ -1,5 +1,8 @@
+const dotenv = require("dotenv");
 const express = require("express");
 const app = express();
+
+dotenv.config();
 
 app.get("/", function(req, res) {
     res.send("Hello world");
