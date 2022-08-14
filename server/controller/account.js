@@ -22,7 +22,18 @@ function depositMoney(req, res) {
         });
 }
 
+function viewTransactions(req, res) {
+    Account.transactions(req.params.id)
+        .then((obj) => {
+            res.status(200).json(obj);
+        })
+        .catch((error) => {
+            res.status(400).json({ message: error });
+        });
+}
+
 module.exports = {
     transferMoney,
     depositMoney,
+    viewTransactions,
 };

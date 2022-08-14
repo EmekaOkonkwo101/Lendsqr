@@ -6,16 +6,25 @@ const asyncHandler = require("express-async-handler");
 transfer = asyncHandler(async(params) => {
     let account_check = await db("accounts").where("account_id", params);
 
+    if (!account_check[0]) {
+        return "User not found";
+    }
+
     let user_check = await db("profile").where("id", account_check[0].profile_id);
 
     let receiver_check = await db("profile").where("number", reciever);
+
+    if (!receiver_check[0]) {
+        return "User not found";
+    }
 
     let receiver_account = await db("accounts").where(
         "profile_id",
         receiver_check[0].id
     );
-    if (!receiver_check[0] || !receiver_account[0]) {
-        return "User not found";
+
+    if (!reciever) {
+        return "Please enter a receiver account number";
     }
 
     if (account_check[0].balance < amount) {
@@ -31,13 +40,15 @@ transfer = asyncHandler(async(params) => {
         await db("accounts")
             .where("profile_id", receiver_check[0].id)
             .update({ balance: add });
+        let session = Math.floor(Math.random() * 1000000000000000);
         await db("transactions").insert({
             account_id: params,
             number: user_check[0].number,
             type: "transfer",
+            session_id: session,
             reciever: receiver_check[0].first_name,
         });
-        return "Transfer sent successfully";
+        return `You have successfully transferred ${amount} to ${receiver_check[0].first_name}`;
     }
 });
 
@@ -55,17 +66,30 @@ deposit = asyncHandler(async(params) => {
     } else {
         let add = account_check[0].balance + amount;
         await db("accounts").where("account_id", params).update({ balance: add });
+        let session = Math.floor(Math.random() * 1000000000000000);
         await db("transactions").insert({
             account_id: account_check[0].id,
             number: user_check[0].number,
             type: "deposit",
+            session_id: session,
             reciever: user_check[0].first_name,
         });
-        return "deposit successful";
+        return `You successfully deposited ${amount} to account`;
+    }
+});
+
+transactions = asyncHandler(async(params) => {
+    let account_check = await db("transactions").where("account_id", params);
+
+    if (!account_check[0]) {
+        return "User has no transaction to display";
+    } else {
+        return account_check;
     }
 });
 
 module.exports = {
     transfer,
     deposit,
+    transactions,
 };
