@@ -1,16 +1,17 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const app = express();
+const userRoutes = require("../server/routes/userRoute");
+const accountRoutes = require("../server/routes/accountRoutes");
 
 dotenv.config();
 
 app.use(express.json());
 
-app.get("/api", function(req, res) {
-    res.send("Hello world");
-});
+app.use("/api", userRoutes);
+app.use("/api", accountRoutes);
 
-const PORT = 8000;
+const PORT = 5000;
 
 app.listen(PORT, () => {
     console.log(`Server is listening on PORT: ${PORT}`);
