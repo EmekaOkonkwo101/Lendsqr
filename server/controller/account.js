@@ -32,8 +32,19 @@ function viewTransactions(req, res) {
         });
 }
 
+function allAccounts(req, res) {
+    Account.getAccounts()
+        .then((obj) => {
+            res.status(200).json(obj);
+        })
+        .catch((error) => {
+            res.status(500).json({ message: error });
+        });
+}
+
 module.exports = {
     transferMoney,
     depositMoney,
     viewTransactions,
+    allAccounts,
 };

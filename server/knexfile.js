@@ -1,12 +1,11 @@
 // Update with your config settings.
-require("dotenv").config({ path: "../.env" });
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 module.exports = {
     staging: {
         client: "mysql",
-        connection: "mysql://b2e4654c2e067f:4540346b@us-cdbr-east-06.cleardb.net/heroku_4ced1f65fd673b8?reconnect=true",
+        connection: "mysql://b6fc4b3e0e2ace:34e4e067@us-cdbr-east-06.cleardb.net/heroku_41388d0abeadf77?reconnect=true",
         pool: {
             min: 2,
             max: 10,

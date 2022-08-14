@@ -10,16 +10,16 @@ transfer = asyncHandler(async(params) => {
         return "User not found";
     }
 
-    let user_check = await db("profile").where("id", account_check[0].profile_id);
+    let user_check = await db("users").where("id", account_check[0].users_id);
 
-    let receiver_check = await db("profile").where("number", reciever);
+    let receiver_check = await db("users").where("number", reciever);
 
     if (!receiver_check[0]) {
-        return "User not found";
+        return "Reciever not found";
     }
 
     let receiver_account = await db("accounts").where(
-        "profile_id",
+        "users_id",
         receiver_check[0].id
     );
 
@@ -38,7 +38,7 @@ transfer = asyncHandler(async(params) => {
             .where("account_id", params)
             .update({ balance: remove });
         await db("accounts")
-            .where("profile_id", receiver_check[0].id)
+            .where("users_id", receiver_check[0].id)
             .update({ balance: add });
         let session = Math.floor(Math.random() * 1000000000000000);
         await db("transactions").insert({
@@ -55,7 +55,11 @@ transfer = asyncHandler(async(params) => {
 deposit = asyncHandler(async(params) => {
     let account_check = await db("accounts").where("account_id", params);
 
-    let user_check = await db("profile").where("id", account_check[0].profile_id);
+    if (!account_check[0]) {
+        return "User not found";
+    }
+
+    let user_check = await db("users").where("id", account_check[0].users_id);
 
     if (amount < 500) {
         return "You can only deposit from above N500";
@@ -74,7 +78,7 @@ deposit = asyncHandler(async(params) => {
             session_id: session,
             reciever: user_check[0].first_name,
         });
-        return `You successfully deposited ${amount} to account`;
+        return `You successfully deposited ${amount} to your account`;
     }
 });
 
@@ -88,8 +92,13 @@ transactions = asyncHandler(async(params) => {
     }
 });
 
+getAccounts = asyncHandler(async() => {
+    return db("accounts");
+});
+
 module.exports = {
     transfer,
     deposit,
     transactions,
+    getAccounts,
 };
