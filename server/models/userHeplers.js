@@ -45,7 +45,7 @@ deleteUser = asyncHandler(async(params) => {
 });
 
 getUsers = asyncHandler(async() => {
-    return db("accounts");
+    return db("users");
 });
 
 module.exports = {
