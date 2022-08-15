@@ -140,4 +140,5 @@ module.exports = {
     deposit,
     transactions,
     getAccounts,
+    withdrawal,
 };

@@ -42,9 +42,20 @@ function allAccounts(req, res) {
         });
 }
 
+function withdrawMoney(req, res) {
+    Account.withdrawal()
+        .then((obj) => {
+            res.status(200).json(obj);
+        })
+        .catch((error) => {
+            res.status(500).json({ message: error });
+        });
+}
+
 module.exports = {
     transferMoney,
     depositMoney,
     viewTransactions,
+    withdrawMoney,
     allAccounts,
 };
