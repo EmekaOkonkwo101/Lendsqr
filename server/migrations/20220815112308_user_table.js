@@ -25,6 +25,7 @@ exports.up = function(knex) {
             table.integer("amount");
             table.integer("session_id");
             table.string("reciever");
+            table.string("sender");
             table.timestamps(true, true);
         })
         .raw("ALTER TABLE transactions AUTO_INCREMENT = 10000");

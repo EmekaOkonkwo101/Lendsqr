@@ -5,7 +5,7 @@
 module.exports = {
     staging: {
         client: "mysql",
-        connection: "mysql://b6fc4b3e0e2ace:34e4e067@us-cdbr-east-06.cleardb.net/heroku_41388d0abeadf77?reconnect=true",
+        connection: "mysql://b6173c1c783571:9fb13a47@us-cdbr-east-06.cleardb.net/heroku_1faed8e4ffe0e2c?reconnect=true",
         pool: {
             min: 2,
             max: 10,

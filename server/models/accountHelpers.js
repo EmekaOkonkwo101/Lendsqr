@@ -49,6 +49,14 @@ transfer = asyncHandler(async(params) => {
             session_id: session,
             reciever: receiver_check[0].first_name,
         });
+        let receiver_id = receiver_account[0];
+        await db("transactions").insert({
+            account_id: receiver_id.account_id,
+            number: user_check[0].number,
+            type: "credit transfer",
+            session_id: session,
+            sender: account_check[0].first_name,
+        });
         return `You have successfully transferred ${amount} to ${receiver_check[0].first_name}`;
     }
 });
