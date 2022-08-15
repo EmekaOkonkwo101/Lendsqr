@@ -2,6 +2,7 @@ const knex = require("knex");
 const config = require("../knexfile");
 const db = knex(config.staging);
 const asyncHandler = require("express-async-handler");
+const generateToken = require("../genToken");
 
 createUser = asyncHandler(async() => {
     const number = Math.floor(Math.random() * 1000000000);
@@ -48,7 +49,12 @@ getUsers = asyncHandler(async() => {
     return db("users");
 });
 
+getToken = asyncHandler(async() => {
+    return generateToken();
+});
+
 module.exports = {
+    getToken,
     createUser,
     getUsers,
     deleteUser,

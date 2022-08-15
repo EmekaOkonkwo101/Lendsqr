@@ -31,4 +31,14 @@ function allUsers(req, res) {
         });
 }
 
-module.exports = { createNewUser, allUsers, deleteNewUser };
+function token(req, res) {
+    Users.getToken()
+        .then((obj) => {
+            res.status(200).json(obj);
+        })
+        .catch((error) => {
+            res.status(500).json({ message: error });
+        });
+}
+
+module.exports = { token, createNewUser, allUsers, deleteNewUser };

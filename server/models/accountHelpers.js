@@ -28,7 +28,7 @@ transfer = asyncHandler(async(params) => {
     }
 
     if (account_check[0].balance < amount) {
-        return "Cannot withdraw above account balance";
+        return "Cannot transfer above account balance";
     } else {
         let remove = account_check[0].balance - amount;
 
@@ -40,13 +40,42 @@ transfer = asyncHandler(async(params) => {
         await db("accounts")
             .where("users_id", receiver_check[0].id)
             .update({ balance: add });
+        let account_id = account_check[0];
         let session = Math.floor(Math.random() * 1000000000000000);
         await db("transactions").insert({
-            account_id: params,
+            account_id: account_id.account_id,
             number: user_check[0].number,
             type: "transfer",
             session_id: session,
             reciever: receiver_check[0].first_name,
+        });
+        return `You have successfully transferred ${amount} to ${receiver_check[0].first_name}`;
+    }
+});
+
+withdrawal = asyncHandler(async(params) => {
+    let account_check = await db("accounts").where("account_id", params);
+
+    if (!account_check[0]) {
+        return "User not found";
+    }
+
+    if (account_check[0].balance < amount) {
+        return "Cannot withdraw above account balance";
+    } else {
+        let remove = account_check[0].balance - amount;
+        await db("accounts")
+            .where("account_id", params)
+            .update({ balance: remove });
+
+        let account_id = account_check[0];
+        let session = Math.floor(Math.random() * 1000000000000000);
+        await db("transactions").insert({
+            account_id: account_id.account_id,
+            number: user_check[0].number,
+            type: "withdrawal",
+            session_id: session,
+            reciever: account_check[0].first_name,
         });
         return `You have successfully transferred ${amount} to ${receiver_check[0].first_name}`;
     }
@@ -69,12 +98,14 @@ deposit = asyncHandler(async(params) => {
         return "This account does not exist";
     } else {
         let add = account_check[0].balance + amount;
+        let account_id = account_check[0];
         await db("accounts").where("account_id", params).update({ balance: add });
         let session = Math.floor(Math.random() * 1000000000000000);
         await db("transactions").insert({
-            account_id: account_check[0].id,
+            account_id: account_id.account_id,
             number: user_check[0].number,
             type: "deposit",
+            amount: amount,
             session_id: session,
             reciever: user_check[0].first_name,
         });
